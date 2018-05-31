@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2006-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "templates/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <properties resource="application.properties"/>
+
+    <!-- 数据库驱动:选择你的本地硬盘上面的数据库驱动包 maven插件中引入mysql驱动,则不需要手动添加-->
+    <!--<classPathEntry location="mysql-connector-java-5.1.46.jar"/>-->
+
+    <!-- MyBatis3DynamicSql模式下需要引入mybatis-dynamic-sql,且不会生成Mapper.xml;
+     MyBatis3模式下会生成对应的Mapper.xml文件-->
+    <context id="dsql" targetRuntime="MyBatis3DynamicSql">
+
+        <!-- 生成hashCode()和equals()方法时所需要的插件,如果有Lombok插件,则可以去掉 -->
+        <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
+
+        <!-- Lombok插件 -->
+        <plugin type="org.mybatis.generator.plugins.lombok.LombokPlugin"/>
+
+        <!-- 设置生成的代码上面的注释内容 -->
+        <commentGenerator>
+            <!-- 是否取消注释 false:带注释 -->
+            <property name="suppressAllComments" value="false"/>
+            <!-- 是否生成注释带时间 false:生成时间信息 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 该属性用于指定MBG是否在生成的注释中包含数据库表中的表和列注释 -->
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!-- jdbc链接 -->
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成模型的包名和位置 targetPackage目标包路径，targetProject目标项目路径 -->
+        <javaModelGenerator targetPackage="com.bert.mybatis.model" targetProject="src/main/java">
+            <!-- 是否在当前路径下新加一层schema, eg: false:cn.sw.study.web.model, true:cn.sw.study.web.model.[schemaName] -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成映射文件的包名和位置-->
+        <sqlMapGenerator targetPackage="static.mapping" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成DAO的包名和位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.bert.mybatis.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 要生成的表 schema：数据库名 tableName是数据库中的表名或视图名 domainObjectName是实体类名,
+        其它属性字段一般可以默认即可,columnOverride可以覆盖指定的数据字段,一般默认生成即可-->
+        <table tableName="t_user" domainObjectName="TUser" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+    </context>
+
+</generatorConfiguration>
