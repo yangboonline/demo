@@ -51,7 +51,6 @@ public class MultiMapTest {
                     if (null == users) {
                         users = Lists.newArrayList();
                         third.put(user.getPhone(), users);
-
                     }
                     users.add(user);
                 }
