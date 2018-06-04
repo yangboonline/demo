@@ -34,6 +34,9 @@
         <!-- 生成hashCode()和equals()方法时所需要的插件,如果有Lombok插件,则可以去掉 -->
         <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
 
+        <!-- 实现序列化接口插件 -->
+        <!--<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />-->
+
         <!-- Lombok插件 -->
         <plugin type="org.mybatis.generator.plugins.lombok.LombokPlugin"/>
 
