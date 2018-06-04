@@ -1,6 +1,14 @@
+# 完全SpringBoot化,只存在application.yml配置文件,不允许引入其他配置文件
+
+# 数据库连接
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/test
     username: root
     password: root
+
+# 日志级别
+logging:
+  level:
+    com.bert.jetcache: debug
