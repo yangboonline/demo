@@ -1,5 +1,6 @@
 package com.bert.jetcache.dao;
 
+import com.alicp.jetcache.anno.CacheUpdate;
 import com.bert.jetcache.model.TUser;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -103,6 +104,7 @@ public interface TUserMapper {
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: t_user")
+    @CacheUpdate(name = "userCache.", key = "#id", value = "#record")
     default int updateByPrimaryKey(TUser record) {
         return UpdateDSL.updateWithMapper(this::update, TUserDynamicSqlSupport.TUser)
                 .set(name).equalTo(record::getName)
