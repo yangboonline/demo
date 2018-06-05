@@ -1,6 +1,6 @@
 # 完全SpringBoot化,只存在application.yml配置文件,不允许引入其他配置文件
 
-# 数据库连接
+# 数据库连接池 默认采用HikariPool,如果有其他需求参考对应厂商文档
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -8,7 +8,11 @@ spring:
     username: root
     password: root
 
-# 日志级别
+# 日志级别 console采用默认日志模版 file采用定制日志模板
 logging:
   level:
-    com.bert.jetcache: debug
+    com.bert.jetcache: info
+    com.bert.jetcache.dao: debug
+  file: /Java/iwork/demo/jetcache/log/jetcache.log
+  pattern:
+    file: '%d{ISO8601} [%thread] [%-5level] [%file:%line] %logger - %msg%n'

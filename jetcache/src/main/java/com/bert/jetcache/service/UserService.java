@@ -3,6 +3,7 @@ package com.bert.jetcache.service;
 import com.alicp.jetcache.anno.Cached;
 import com.bert.jetcache.dao.TUserMapper;
 import com.bert.jetcache.model.TUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * @author yangbo
  * @date 2018/6/4
  */
+@Slf4j
 @Service
 public class UserService {
 
