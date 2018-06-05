@@ -7,6 +7,9 @@ import com.bert.jetcache.dao.TUserMapper;
 import com.bert.jetcache.model.TUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +23,17 @@ import java.util.Date;
  */
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements ApplicationContextAware {
 
     @Resource
     private TUserMapper tUserMapper;
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     @Cached(name = "userCache.", key = "#id", expire = 60, cacheNullValue = true)
     @CacheRefresh(refresh = 50)
@@ -47,6 +57,10 @@ public class UserService {
     public Integer addTUser() {
         TUser user = TUser.builder().age(1).money(BigDecimal.ONE).name("test").build();
         int insert = tUserMapper.insert(user);
+        if (0 != insert) {
+            UserService userService = applicationContext.getBean(UserService.class);
+            userService.selectByPrimaryKey(user.getId());
+        }
         return insert;
     }
 

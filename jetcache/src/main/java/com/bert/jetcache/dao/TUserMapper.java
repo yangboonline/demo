@@ -5,6 +5,7 @@ import com.bert.jetcache.model.TUser;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -40,6 +41,7 @@ public interface TUserMapper {
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: t_user")
     @InsertProvider(type = SqlProviderAdapter.class, method = "insert")
+    @Options(useGeneratedKeys = true, keyProperty = "record.id", keyColumn = "id")
     int insert(InsertStatementProvider<TUser> insertStatement);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: t_user")
