@@ -104,7 +104,7 @@ public interface TUserMapper {
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: t_user")
-    @CacheUpdate(name = "userCache.", key = "#id", value = "#record")
+    @CacheUpdate(name = "userCache.", key = "#record.id", value = "#record")
     default int updateByPrimaryKey(TUser record) {
         return UpdateDSL.updateWithMapper(this::update, TUserDynamicSqlSupport.TUser)
                 .set(name).equalTo(record::getName)

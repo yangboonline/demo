@@ -24,8 +24,8 @@ public class UserService {
     @Resource
     private TUserMapper tUserMapper;
 
-    @Cached(name = "userCache.", key = "#id", expire = 10, cacheNullValue = true)
-    @CacheRefresh(refresh = 5)
+    @Cached(name = "userCache.", key = "#id", expire = 60, cacheNullValue = true)
+    @CacheRefresh(refresh = 50)
     public TUser selectByPrimaryKey(Long id) {
         TUser tUser = tUserMapper.selectByPrimaryKey(id);
         return tUser;
@@ -38,7 +38,7 @@ public class UserService {
         BeanUtils.copyProperties(tUser, temp);
         temp.setAge(2);
         temp.setUpdateAt(new Date());
-        int update = tUserMapper.updateByPrimaryKey(tUser);
+        int update = tUserMapper.updateByPrimaryKey(temp);
         return update;
     }
 
