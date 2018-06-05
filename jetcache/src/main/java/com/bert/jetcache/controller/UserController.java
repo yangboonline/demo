@@ -2,6 +2,7 @@ package com.bert.jetcache.controller;
 
 import com.bert.jetcache.common.Message;
 import com.bert.jetcache.service.UserService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,6 +33,11 @@ public class UserController {
     @PutMapping("update")
     public Message update() {
         return Message.success(userService.updateByPrimaryKey(1L));
+    }
+
+    @DeleteMapping("delete")
+    public Message delete() {
+        return Message.success(userService.delete(1L));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.bert.jetcache.service;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.Cached;
 import com.bert.jetcache.dao.TUserMapper;
@@ -47,6 +48,13 @@ public class UserService {
         TUser user = TUser.builder().age(1).money(BigDecimal.ONE).name("test").build();
         int insert = tUserMapper.insert(user);
         return insert;
+    }
+
+    @CacheInvalidate(name = "userCache.", key = "#id")
+    @Transactional(rollbackFor = Exception.class)
+    public Integer delete(Long id) {
+        int delete = tUserMapper.deleteByPrimaryKey(id);
+        return delete;
     }
 
 }
