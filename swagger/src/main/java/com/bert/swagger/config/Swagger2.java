@@ -78,8 +78,10 @@ public class Swagger2 {
                 .build();
         //now, we create connection-manager using our Registry. allows multi-threaded use
         PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-        connMgr.setMaxTotal(200);
-        connMgr.setDefaultMaxPerRoute(100);
+        // 默认设置route最大连接数
+        connMgr.setDefaultMaxPerRoute(500);
+        // 连接池最大连接数
+        connMgr.setMaxTotal(1000);
         httpClientBuilder.setConnectionManager(connMgr);
 
         CloseableHttpClient httpClient = httpClientBuilder.build();
