@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bert</groupId>
+    <artifactId>maven-plugins</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <!-- 该插件使用XML绑定（JAXB）版本2+的Java API从XML模式（以及可选的绑定文件）生成Java类，
+			     并从注释的Java类创建XML模式。该插件通过其JAXB实现依赖关系将其大部分工作委托给JDK提供的
+			     两个工具XJC和Schemagen中的任意一个 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>2.5-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- xsd的地址 -->
+                    <sources>
+                        <source>src/main/xsd</source>
+                    </sources>
+                    <!-- 生成源码的包地址 -->
+                    <packageName>com.bert.xml.demo</packageName>
+                    <!-- 添加@Generated注解 -->
+                    <addGeneratedAnnotation>true</addGeneratedAnnotation>
+                    <!-- 文件的编码格式 -->
+                    <encoding>UTF-8</encoding>
+                    <!-- 生成源注释的语言(目前中文存在bug,临时解决办法详见README) -->
+                    <locale>zh</locale>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    
+</project>
