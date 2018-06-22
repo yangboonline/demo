@@ -62,7 +62,7 @@ public class SoapUtil {
             Document document = soapMessage.getSOAPPart().getEnvelope().getOwnerDocument();
             transformer.transform(new DOMSource(document), new StreamResult(sw));
         } catch (Exception e) {
-            log.error("parse SoapBody error.", e);
+            log.error("parse SoapMessage error.", e);
         }
         return sw.toString();
     }
