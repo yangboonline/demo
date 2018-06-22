@@ -1,10 +1,9 @@
 package com.bert.plugins.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -15,10 +14,13 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author yangbo
@@ -45,6 +47,24 @@ public class SoapUtil {
             log.error("format Soap String error.", e);
         }
         return null;
+    }
+
+    /**
+     * 将SOAPMessage解析成String
+     *
+     * @param soapMessage
+     * @return
+     */
+    public static String parseMessage(SOAPMessage soapMessage) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            Document document = soapMessage.getSOAPPart().getEnvelope().getOwnerDocument();
+            transformer.transform(new DOMSource(document), new StreamResult(sw));
+        } catch (Exception e) {
+            log.error("parse SoapBody error.", e);
+        }
+        return sw.toString();
     }
 
     /**
