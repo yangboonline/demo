@@ -117,7 +117,7 @@ public class SoapUtil {
             // 创建SOAPMessage
             SOAPMessage message = MessageFactory.newInstance().createMessage();
             // 添加xml描述信息
-            message.setProperty(SOAPMessage.WRITE_XML_DECLARATION, "true");
+            message.setProperty(SOAPMessage.WRITE_XML_DECLARATION, Boolean.TRUE.toString());
             // SOAPBody添加子节点
             SOAPBody soapBody = message.getSOAPBody();
             soapBody.addTextNode(xmlBody);
