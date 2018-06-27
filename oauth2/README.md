@@ -120,18 +120,18 @@ E步骤中，认证服务器发送的HTTP回复，包含以下参数：
 
 下面是一个例子。
 
-     HTTP/1.1 200 OK
-     Content-Type: application/json;charset=UTF-8
-     Cache-Control: no-store
-     Pragma: no-cache
+    HTTP/1.1 200 OK
+    Content-Type: application/json;charset=UTF-8
+    Cache-Control: no-store
+    Pragma: no-cache
 
-     {
-       "access_token":"2YotnFZFEjr1zCsicMWpAA",
-       "token_type":"example",
-       "expires_in":3600,
-       "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
-       "example_parameter":"example_value"
-     }
+    {
+      "access_token":"2YotnFZFEjr1zCsicMWpAA",
+      "token_type":"example",
+      "expires_in":3600,
+      "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+      "example_parameter":"example_value"
+    }
 
 
 从上面代码可以看到，相关参数使用JSON格式发送（Content-Type: application/json）。此外，HTTP头信息中明确指定不得缓存。
@@ -175,9 +175,9 @@ C步骤中，认证服务器回应客户端的URI，包含以下参数：
 
 下面是一个例子。
 
-     HTTP/1.1 302 Found
-     Location: http://example.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA
-               &state=xyz&token_type=example&expires_in=3600
+    HTTP/1.1 302 Found
+    Location: http://example.com/cb#access_token=2YotnFZFEjr1zCsicMWpAA
+              &state=xyz&token_type=example&expires_in=3600
 
 
 在上面的例子中，认证服务器用HTTP头信息的Location栏，指定浏览器重定向的网址。注意，在这个网址的Hash部分包含了令牌。
@@ -202,28 +202,28 @@ B步骤中，客户端发出的HTTP请求，包含以下参数：
 
 下面是一个例子。
 
-     POST /token HTTP/1.1
-     Host: server.example.com
-     Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-     Content-Type: application/x-www-form-urlencoded
+    POST /token HTTP/1.1
+    Host: server.example.com
+    Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+    Content-Type: application/x-www-form-urlencoded
 
-     grant_type=password&username=johndoe&password=A3ddj3w
+    grant_type=password&username=johndoe&password=A3ddj3w
 
 
 C步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。
 
-     HTTP/1.1 200 OK
-     Content-Type: application/json;charset=UTF-8
-     Cache-Control: no-store
-     Pragma: no-cache
+    HTTP/1.1 200 OK
+    Content-Type: application/json;charset=UTF-8
+    Cache-Control: no-store
+    Pragma: no-cache
 
-     {
-       "access_token":"2YotnFZFEjr1zCsicMWpAA",
-       "token_type":"example",
-       "expires_in":3600,
-       "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
-       "example_parameter":"example_value"
-     }
+    {
+      "access_token":"2YotnFZFEjr1zCsicMWpAA",
+      "token_type":"example",
+      "expires_in":3600,
+      "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+      "example_parameter":"example_value"
+    }
 
 
 上面代码中，各个参数的含义参见《授权码模式》一节。
@@ -243,28 +243,27 @@ A步骤中，客户端发出的HTTP请求，包含以下参数：
 * scope：表示权限范围，可选项。
 
 
-     POST /token HTTP/1.1
-     Host: server.example.com
-     Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-     Content-Type: application/x-www-form-urlencoded
+    POST /token HTTP/1.1
+    Host: server.example.com
+    Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+    Content-Type: application/x-www-form-urlencoded
 
-     grant_type=client_credentials
-
+    grant_type=client_credentials
 
 认证服务器必须以某种方式，验证客户端身份。
 B步骤中，认证服务器向客户端发送访问令牌，下面是一个例子。
 
-     HTTP/1.1 200 OK
-     Content-Type: application/json;charset=UTF-8
-     Cache-Control: no-store
-     Pragma: no-cache
+    HTTP/1.1 200 OK
+    Content-Type: application/json;charset=UTF-8
+    Cache-Control: no-store
+    Pragma: no-cache
 
-     {
-       "access_token":"2YotnFZFEjr1zCsicMWpAA",
-       "token_type":"example",
-       "expires_in":3600,
-       "example_parameter":"example_value"
-     }
+    {
+      "access_token":"2YotnFZFEjr1zCsicMWpAA",
+      "token_type":"example",
+      "expires_in":3600,
+      "example_parameter":"example_value"
+    }
 
 
 上面代码中，各个参数的含义参见《授权码模式》一节。
@@ -278,12 +277,12 @@ B步骤中，认证服务器向客户端发送访问令牌，下面是一个例�
 
 下面是一个例子。
 
-     POST /token HTTP/1.1
-     Host: server.example.com
-     Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-     Content-Type: application/x-www-form-urlencoded
+    POST /token HTTP/1.1
+    Host: server.example.com
+    Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+    Content-Type: application/x-www-form-urlencoded
 
-     grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
+    grant_type=refresh_token&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
 
 （完）
 
