@@ -5,13 +5,13 @@
 OAuth是一个关于授权（authorization）的开放网络标准，在全世界得到广泛应用，目前的版本是2.0版。
 本文对OAuth 2.0的设计思路和运行流程，做一个简明通俗的解释，主要参考材料为RFC 6749。
 
-![OAuth Logo](http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051201.png)
+![OAuth Logo](https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051201.png?raw=true)
 
 ### 一、应用场景
 为了理解OAuth的适用场合，让我举一个假设的例子。
 有一个"云冲印"的网站，可以将用户储存在Google的照片，冲印出来。用户为了使用该服务，必须让"云冲印"读取自己储存在Google上的照片。
 
-![Google云冲印](http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051202.png)
+![Google云冲印](https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051202.png?raw=true)
 
 问题是只有得到用户的授权，Google才会同意"云冲印"读取这些照片。那么，"云冲印"怎样获得用户的授权呢？
 传统方法是，用户将自己的Google用户名和密码，告诉"云冲印"，后者就可以读取用户的照片了。这样的做法有以下几个严重的缺点。
@@ -293,8 +293,8 @@ B步骤中，认证服务器向客户端发送访问令牌，下面是一个例�
 
 ---
 
-[OAuth2运行流程]: http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051203.png
-[授权码模式]: http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051204.png
-[简化模式]: http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051205.png
-[密码模式]: http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051206.png
-[客户端模式]: http://www.ruanyifeng.com/blogimg/asset/2014/bg2014051207.png
+[OAuth2运行流程]: https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051203.png?raw=true
+[授权码模式]: https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051204.png?raw=true
+[简化模式]: https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051205.png?raw=true
+[密码模式]: https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051206.png?raw=true
+[客户端模式]: https://github.com/yangboonline/demo/blob/master/oauth2/src/main/resources/static/bg2014051207.png?raw=true
