@@ -95,10 +95,10 @@ C步骤中，服务器回应客户端的URI，包含以下参数：
 
 
 D步骤中，客户端向认证服务器申请令牌的HTTP请求，包含以下参数：
-*grant_type：表示使用的授权模式，必选项，此处的值固定为"authorization_code"。
-*code：表示上一步获得的授权码，必选项。
-*redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。
-*client_id：表示客户端ID，必选项。
+* grant_type：表示使用的授权模式，必选项，此处的值固定为"authorization_code"。
+* code：表示上一步获得的授权码，必选项。
+* redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。
+* client_id：表示客户端ID，必选项。
 
 下面是一个例子。
 
