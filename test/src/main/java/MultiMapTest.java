@@ -2,6 +2,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.GsonBuilder;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
@@ -47,16 +50,27 @@ public class MultiMapTest {
                     third.put(user.getPhone(), users);
                     users.add(user);
                 } else {
-                    List<User> users = third.get(user.getPhone());
-                    if (null == users) {
-                        users = Lists.newArrayList();
-                        third.put(user.getPhone(), users);
-                    }
+                    List<User> users = third.computeIfAbsent(user.getPhone(), k -> Lists.newArrayList());
                     users.add(user);
                 }
             }
         });
         System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(first));
+    }
+
+    /**
+     * @author yangbo
+     * @date 2018/5/30
+     */
+    @Data
+    @Builder
+    @ToString
+    private static class User {
+
+        private String name;
+        private String age;
+        private String phone;
+
     }
 
 }
