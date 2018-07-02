@@ -12,8 +12,10 @@ logging:
 ```
 可以完整的看到内部的运转流程。
 
-client模式稍微简单一些，使用client模式获取token 
+client模式稍微简单一些，使用client模式获取token
+```
 http://localhost:8080/oauth/token?client_id=client_1&client_secret=123456&scope=select&grant_type=client_credentials
+```
 
 由于debug信息太多了，我简单按照顺序列了一下关键的几个类：
 
