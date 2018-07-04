@@ -1,0 +1,5 @@
+redisson:
+  address: redis://127.0.0.1:6379
+  timeout: 3000
+  connection-pool-size: 64
+  connection-minimum-idle-size: 10

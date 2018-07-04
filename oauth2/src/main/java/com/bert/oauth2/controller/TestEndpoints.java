@@ -35,7 +35,7 @@ public class TestEndpoints {
 
     @GetMapping("/id")
     public String test() {
-        String id = idGeneratorService.generateId();
+        String id = idGeneratorService.generateId("test");
         return id;
     }
 
