@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yangbo
@@ -41,7 +43,8 @@ public class IdGeneratorService implements CommandLineRunner {
     private String port;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    @Qualifier("redisTemplate")
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private RedissonClient redisson;
@@ -124,6 +127,7 @@ public class IdGeneratorService implements CommandLineRunner {
         } else {
             sb.append(timestamp).append(counter.get());
         }
+        redisTemplate.expire(businessCode, 24, TimeUnit.HOURS);
         return sb.toString();
     }
 
