@@ -50,7 +50,7 @@ public class IdGeneratorService implements CommandLineRunner {
     private RedissonClient redisson;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         String currentWork = null;
         String workers = null;
         try {
@@ -112,11 +112,23 @@ public class IdGeneratorService implements CommandLineRunner {
      * </pre>
      */
     public String generateId(String businessCode) {
+        // 随机生成大于0小于50的订单号偏量值
         int delta = new Random().nextInt(50) + 1;
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
-        RAtomicLong counter = redisson.getAtomicLong(businessCode);
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 格式化当前时间到毫秒
+        String timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+        // 格式化当前时间到天
+        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        // 创建Redis联合键值
+        String unionKey = String.join(":", businessCode, keySuffix);
+        // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
+        RAtomicLong counter = redisson.getAtomicLong(unionKey);
+        // 执行递增操作
         counter.addAndGet(delta);
+        // 获取counter的长度
         int length = String.valueOf(counter.get()).length();
+        // 如果长度小于COUNT值,需要补位"0"
         StringBuilder sb = new StringBuilder();
         if (length < COUNT) {
             sb.append(timestamp);
@@ -127,7 +139,8 @@ public class IdGeneratorService implements CommandLineRunner {
         } else {
             sb.append(timestamp).append(counter.get());
         }
-        redisTemplate.expire(businessCode, 24, TimeUnit.HOURS);
+        // 历史Redis联合键值最多在缓存中保留24小时
+        redisTemplate.expire(unionKey, 24, TimeUnit.HOURS);
         return sb.toString();
     }
 
