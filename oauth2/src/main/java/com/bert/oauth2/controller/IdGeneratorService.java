@@ -22,6 +22,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
@@ -37,7 +38,25 @@ import java.util.concurrent.TimeUnit;
 @Order(Integer.MAX_VALUE - 1)
 public class IdGeneratorService implements CommandLineRunner {
 
-    private static final long COUNT = 11;
+    /**
+     * 支付宝订单尾号默认长度
+     */
+    private static final long ALIPAY_COUNT = 11;
+
+    /**
+     * 天猫订单尾号默认长度
+     */
+    private static final long TMALL_COUNT = 8;
+
+    /**
+     * 天猫订单号前缀基准值
+     */
+    private static final long ORDER_PREFIX = 1000;
+
+    /**
+     * 基准日期
+     */
+    private static final LocalDate BASE_DATE = LocalDate.of(2018, 1, 1);
 
     @Value("${server.port}")
     private String port;
@@ -104,14 +123,13 @@ public class IdGeneratorService implements CommandLineRunner {
     }
 
     /**
-     * id生成器(类支付宝订单号)
+     * 支付宝订单号生成器
      * <pre>
      *     example:
      *          支付宝流水号:2018062021001001710502897238
-     *          天猫订单号:165035137214303944
      * </pre>
      */
-    public String generateId(String businessCode) {
+    public String generateAlipayOrderNumber(String businessCode) {
         // 随机生成大于0小于50的订单号偏量值
         int delta = new Random().nextInt(50) + 1;
         // 获取当前时间
@@ -121,7 +139,7 @@ public class IdGeneratorService implements CommandLineRunner {
         // 格式化当前时间到天
         String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         // 创建Redis联合键值
-        String unionKey = String.join(":", businessCode, keySuffix);
+        String unionKey = String.join(":", businessCode, "Alipay", keySuffix);
         // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
         RAtomicLong counter = redisson.getAtomicLong(unionKey);
         // 执行递增操作
@@ -130,14 +148,60 @@ public class IdGeneratorService implements CommandLineRunner {
         int length = String.valueOf(counter.get()).length();
         // 如果长度小于COUNT值,需要补位"0"
         StringBuilder sb = new StringBuilder();
-        if (length < COUNT) {
+        if (length < ALIPAY_COUNT) {
             sb.append(timestamp);
-            for (int i = 0; i < COUNT - length; i++) {
+            for (int i = 0; i < ALIPAY_COUNT - length; i++) {
                 sb.append("0");
             }
             sb.append(counter.get());
         } else {
             sb.append(timestamp).append(counter.get());
+        }
+        // 历史Redis联合键值最多在缓存中保留24小时
+        redisTemplate.expire(unionKey, 24, TimeUnit.HOURS);
+        return sb.toString();
+    }
+
+    /**
+     * 天猫订单号生成器
+     * <pre>
+     *     example:
+     *          天猫订单号:165035137214303944
+     * </pre>
+     */
+    public String generateTMallOrderNumber(String businessCode) {
+        // 随机生成大于0小于50的订单号偏量值
+        int delta = new Random().nextInt(50) + 1;
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 获取当前日期
+        LocalDate today = now.toLocalDate();
+        // 与基准日期相差的天数
+        long days = today.toEpochDay() - BASE_DATE.toEpochDay();
+        // 订单号前缀
+        String prefix = String.valueOf(ORDER_PREFIX + days);
+        // 格式化当前时间为时分秒
+        String middle = now.format(DateTimeFormatter.ofPattern("HHmmss"));
+        // 格式化当前时间到天
+        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        // 创建Redis联合键值
+        String unionKey = String.join(":", businessCode, "TMall", keySuffix);
+        // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
+        RAtomicLong counter = redisson.getAtomicLong(unionKey);
+        // 执行递增操作
+        counter.addAndGet(delta);
+        // 获取counter的长度
+        int length = String.valueOf(counter.get()).length();
+        // 如果长度小于COUNT值,需要补位"0"
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix).append(middle);
+        if (length < TMALL_COUNT) {
+            for (int i = 0; i < TMALL_COUNT - length; i++) {
+                sb.append("0");
+            }
+            sb.append(counter.get());
+        } else {
+            sb.append(counter.get());
         }
         // 历史Redis联合键值最多在缓存中保留24小时
         redisTemplate.expire(unionKey, 24, TimeUnit.HOURS);

@@ -13,8 +13,9 @@ import java.util.Date;
 public class TestInstant {
 
     public static void main(String[] args) {
-        LocalDateTime time = LocalDateTime.of(2018, 7, 5, 14, 15, 0);
-        System.out.println(time);
+        LocalDate BASE_DATE = LocalDate.of(2018, 7, 1);
+        LocalDate now = LocalDateTime.now().toLocalDate();
+        System.out.println(now.toEpochDay() - BASE_DATE.toEpochDay());
     }
 
     public static void test1() {

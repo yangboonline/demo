@@ -35,8 +35,9 @@ public class TestEndpoints {
 
     @GetMapping("/id")
     public String test() {
-        String id = idGeneratorService.generateId("test");
-        return id;
+        String id1 = idGeneratorService.generateAlipayOrderNumber("test");
+        String id2 = idGeneratorService.generateTMallOrderNumber("test");
+        return id1 + "         " + id2;
     }
 
 }
