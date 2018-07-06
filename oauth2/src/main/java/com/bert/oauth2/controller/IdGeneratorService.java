@@ -54,6 +54,26 @@ public class IdGeneratorService implements CommandLineRunner {
     private static final long ORDER_PREFIX = 1000;
 
     /**
+     * 随机数最大偏移量
+     */
+    private static final int MAX_OFFSET = 5000;
+
+    /**
+     * 日期时间毫秒
+     */
+    private static final String DATE_TIME_MILLISECOND = "yyyyMMddHHmmssSSS";
+
+    /**
+     * 日期
+     */
+    private static final String DATE = "yyyyMMdd";
+
+    /**
+     * 时间
+     */
+    private static final String TIME = "HHmmss";
+
+    /**
      * 基准日期
      */
     private static final LocalDate BASE_DATE = LocalDate.of(2018, 1, 1);
@@ -130,14 +150,14 @@ public class IdGeneratorService implements CommandLineRunner {
      * </pre>
      */
     public String generateAlipayOrderNumber(String businessCode) {
-        // 随机生成大于0小于50的订单号偏量值
-        int delta = new Random().nextInt(50) + 1;
+        // 随机生成大于0小于MAX_OFFSET的订单号偏量值
+        int delta = new Random().nextInt(MAX_OFFSET) + 1;
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
         // 格式化当前时间到毫秒
-        String timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+        String timestamp = now.format(DateTimeFormatter.ofPattern(DATE_TIME_MILLISECOND));
         // 格式化当前时间到天
-        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String keySuffix = now.format(DateTimeFormatter.ofPattern(DATE));
         // 创建Redis联合键值
         String unionKey = String.join(":", businessCode, "Alipay", keySuffix);
         // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
@@ -170,8 +190,8 @@ public class IdGeneratorService implements CommandLineRunner {
      * </pre>
      */
     public String generateTMallOrderNumber(String businessCode) {
-        // 随机生成大于0小于50的订单号偏量值
-        int delta = new Random().nextInt(50) + 1;
+        // 随机生成大于0小于MAX_OFFSET的订单号偏量值
+        int delta = new Random().nextInt(MAX_OFFSET) + 1;
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
         // 获取当前日期
@@ -181,9 +201,9 @@ public class IdGeneratorService implements CommandLineRunner {
         // 订单号前缀
         String prefix = String.valueOf(ORDER_PREFIX + days);
         // 格式化当前时间为时分秒
-        String middle = now.format(DateTimeFormatter.ofPattern("HHmmss"));
+        String middle = now.format(DateTimeFormatter.ofPattern(TIME));
         // 格式化当前时间到天
-        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String keySuffix = now.format(DateTimeFormatter.ofPattern(DATE));
         // 创建Redis联合键值
         String unionKey = String.join(":", businessCode, "TMall", keySuffix);
         // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
