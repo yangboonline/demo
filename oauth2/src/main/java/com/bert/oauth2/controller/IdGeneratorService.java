@@ -163,20 +163,18 @@ public class IdGeneratorService implements CommandLineRunner {
         // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
         RAtomicLong counter = redisson.getAtomicLong(unionKey);
         // 执行递增操作
-        counter.addAndGet(delta);
+        long suffix = counter.addAndGet(delta);
         // 获取counter的长度
-        int length = String.valueOf(counter.get()).length();
+        int length = String.valueOf(suffix).length();
         // 如果长度小于COUNT值,需要补位"0"
         StringBuilder sb = new StringBuilder();
+        sb.append(timestamp);
         if (length < ALIPAY_COUNT) {
-            sb.append(timestamp);
             for (int i = 0; i < ALIPAY_COUNT - length; i++) {
                 sb.append("0");
             }
-            sb.append(counter.get());
-        } else {
-            sb.append(timestamp).append(counter.get());
         }
+        sb.append(suffix);
         // 历史Redis联合键值最多在缓存中保留24小时
         redisTemplate.expire(unionKey, 24, TimeUnit.HOURS);
         return sb.toString();
@@ -209,9 +207,9 @@ public class IdGeneratorService implements CommandLineRunner {
         // 通过RedissonClient获取分布式原子类,生成订单尾号的初始值
         RAtomicLong counter = redisson.getAtomicLong(unionKey);
         // 执行递增操作
-        counter.addAndGet(delta);
+        long suffix = counter.addAndGet(delta);
         // 获取counter的长度
-        int length = String.valueOf(counter.get()).length();
+        int length = String.valueOf(suffix).length();
         // 如果长度小于COUNT值,需要补位"0"
         StringBuilder sb = new StringBuilder();
         sb.append(prefix).append(middle);
@@ -219,10 +217,8 @@ public class IdGeneratorService implements CommandLineRunner {
             for (int i = 0; i < TMALL_COUNT - length; i++) {
                 sb.append("0");
             }
-            sb.append(counter.get());
-        } else {
-            sb.append(counter.get());
         }
+        sb.append(suffix);
         // 历史Redis联合键值最多在缓存中保留24小时
         redisTemplate.expire(unionKey, 24, TimeUnit.HOURS);
         return sb.toString();
