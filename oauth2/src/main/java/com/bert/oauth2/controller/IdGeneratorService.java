@@ -81,9 +81,9 @@ public class IdGeneratorService implements CommandLineRunner {
     @Value("${server.port}")
     private String port;
 
-    @Resource
-    @Qualifier("redisTemplate")
-    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    @Qualifier("stringRedisTemplate")
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private RedissonClient redisson;
