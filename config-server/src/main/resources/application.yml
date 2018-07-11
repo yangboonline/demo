@@ -1,15 +1,18 @@
+server:
+  port: 8088
+
 spring:
   application:
     name: config-server
   cloud:
     config:
+      label: master
       server:
         git:
           uri: https://github.com/yangboonline/config-respo.git
           username: yangboonline
           password: yangbo0512
           search-paths: '{application}'
-      label: master
 
-server:
-  port: 8088
+encrypt:
+  key: 6YtbURwm3ELpa1mCj6oVyg==
