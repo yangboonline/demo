@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/yangboonline/config-respo.git
+          username: yangboonline
+          password: yangbo0512
+          search-paths: '{application}'
+      label: master
+
+server:
+  port: 8088
