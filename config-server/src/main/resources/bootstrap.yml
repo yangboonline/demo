@@ -4,7 +4,6 @@
 
 # 非对称加密
 encrypt:
-  key: 6YtbURwm3ELpa1mCj6oVyg==
   keyStore:
       location: classpath:server-rsa.jks # key store file 生成方法:cmd执行keytool -genkeypair -alias 别名 -keyalg RSA -dname "CN=Web Server,OU=Unit,O=Organization,L=City,S=State,C=US" -keypass 公钥 -keystore server-rsa.jks -storepass 私钥
       password: paic1234 # 公钥
