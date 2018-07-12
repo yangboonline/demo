@@ -3,8 +3,16 @@ spring:
     name: config-client
   cloud:
     config:
-      username: admin
-      password: admin
+      username: admin # server basic认证账号
+      password: admin # server basic认证密码
       label: master
       profile: dev
       uri: http://localhost:8088/
+    bus:
+      trace:
+        enabled: true # 设置节点状态跟踪，也可以通过网页 http://localhost:8089/trace 可以看到相关发送事件的数据内容
+  rabbitmq:
+    host: localhost   # 登录 Rabbitmq 后台管理页面地址为：http://localhost:15672
+    port: 5672
+    username: admin   # 默认账户 guest
+    password: admin   # 默认密码 guest
