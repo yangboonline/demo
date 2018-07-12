@@ -13,6 +13,3 @@ spring:
           username: yangboonline
           password: yangbo0512
           search-paths: '{application}'
-
-encrypt:
-  key: 6YtbURwm3ELpa1mCj6oVyg==

@@ -1,0 +1,12 @@
+# 对称加密
+# encrypt:
+#   key: 6YtbURwm3ELpa1mCj6oVyg==
+
+# 非对称加密
+encrypt:
+  key: 6YtbURwm3ELpa1mCj6oVyg==
+  keyStore:
+      location: classpath:/server-rsa.jks
+      password: paic1234
+      alias: mytestkey
+      secret: aaaaa888
