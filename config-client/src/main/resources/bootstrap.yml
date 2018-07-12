@@ -3,6 +3,8 @@ spring:
     name: config-client
   cloud:
     config:
+      username: admin
+      password: admin
       label: master
       profile: dev
       uri: http://localhost:8088/

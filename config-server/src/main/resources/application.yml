@@ -13,3 +13,7 @@ spring:
           username: yangboonline
           password: yangbo0512
           search-paths: '{application}'
+  security:
+    user:
+      name: admin
+      password: admin
