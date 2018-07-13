@@ -10,8 +10,8 @@ spring:
       server:
         git:
           uri: https://github.com/yangboonline/config-respo.git
-          username: yangboonline
-          password: yangbo0512
+          # username: ******
+          # password: ******
           search-paths: '{application}'
         native:
           search-locations: /Java/iwork/config
