@@ -15,4 +15,16 @@ spring:
     host: localhost   # 登录 Rabbitmq 后台管理页面地址为：http://localhost:15672
     port: 5672
     username: admin   # 默认账户 guest
-    password: admin   # 默认密码 guest
+    password: admin  # 默认密码 guest
+
+management:
+  endpoint:
+    bus-refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+
+
+

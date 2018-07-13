@@ -9,3 +9,9 @@ encrypt:
       password: paic1234 # 公钥
       alias: mytestkey   # 别名
       secret: aaaaa888   # 私钥
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
