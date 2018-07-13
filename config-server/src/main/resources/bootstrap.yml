@@ -10,6 +10,7 @@ encrypt:
       alias: mytestkey   # 别名
       secret: aaaaa888   # 私钥
 
+# 暴露所有端点
 management:
   endpoints:
     web:
