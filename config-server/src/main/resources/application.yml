@@ -20,4 +20,4 @@ spring:
       name: admin
       password: admin
   profiles:
-    active: native
+    active: native # native指定本地, 生成环境务必在启动命令中指定 -Dspring.profiles.active=prod
