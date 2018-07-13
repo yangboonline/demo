@@ -17,6 +17,7 @@ spring:
     username: admin   # 默认账户 guest
     password: admin  # 默认密码 guest
 
+# 通过spring-cloud-bus动态刷新配置 http://localhost:8089/actuator/bus-refresh
 management:
   endpoint:
     bus-refresh:
