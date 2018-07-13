@@ -13,7 +13,11 @@ spring:
           username: yangboonline
           password: yangbo0512
           search-paths: '{application}'
+        native:
+          search-locations: /Java/iwork/config
   security:
     user:
       name: admin
       password: admin
+  profiles:
+    active: native
