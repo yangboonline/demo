@@ -20,4 +20,4 @@ spring:
       name: admin
       password: admin
   profiles:
-    active: '@project.environment@' # native指定本地, maven的profile标签激活profile, 生成环境务必在启动命令中指定 -Dspring.profiles.active=prod
+    active: '@project.environment@' # native指定本地, maven的profile标签激活profile, 生产环境务必在启动命令中指定 -Dspring.profiles.active=prod
