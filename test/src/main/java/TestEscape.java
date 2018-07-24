@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class TestEscape {
 
     public static void main(String[] args) {
-        System.out.println(StringEscapeUtils.unescapeJava("a\nb\nc"));
+        System.out.println(StringEscapeUtils.unescapeJava("a\\tb\\tc\\td\\te"));
     }
 
 }
