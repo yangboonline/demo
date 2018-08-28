@@ -1,5 +1,7 @@
 package com.bert.swagger.aop;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,7 +11,7 @@ import java.lang.annotation.Target;
  * @author yangbo
  * @date 2018/6/12
  */
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Retry {
 
@@ -21,6 +23,6 @@ public @interface Retry {
     /**
      * 请求url
      */
-    String url();
+    String url() default StringUtils.EMPTY;
 
 }
