@@ -65,7 +65,7 @@ public class MultiMapTest {
     @Data
     @Builder
     @ToString
-    private static class User {
+    public static class User {
 
         private String name;
         private String age;

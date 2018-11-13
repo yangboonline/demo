@@ -1,10 +1,18 @@
+import com.google.common.collect.ImmutableList;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author yangbo
@@ -13,9 +21,13 @@ import java.util.Date;
 public class TestInstant {
 
     public static void main(String[] args) {
-        LocalDate BASE_DATE = LocalDate.of(2018, 7, 1);
-        LocalDate now = LocalDateTime.now().toLocalDate();
-        System.out.println(now.toEpochDay() - BASE_DATE.toEpochDay());
+        MultiMapTest.User user1 = MultiMapTest.User.builder().age("1").name("1").phone("1").build();
+        MultiMapTest.User user2 = MultiMapTest.User.builder().age("2").name("2").phone("2").build();
+        MultiMapTest.User user3 = MultiMapTest.User.builder().age("3").name("3").phone("3").build();
+        MultiMapTest.User user4 = MultiMapTest.User.builder().age("4").name("4").phone("4").build();
+        List<MultiMapTest.User> list = ImmutableList.of(user1, user2, user3, user4);
+        Map<String, MultiMapTest.User> collect = list.stream().collect(Collectors.toMap(MultiMapTest.User::getAge, Function.identity()));
+        System.out.println();
     }
 
     public static void test1() {
@@ -32,6 +44,11 @@ public class TestInstant {
         System.out.println(date);
         Instant instant = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant();
         System.out.println(Date.from(instant));
+    }
+
+    public static void test3() {
+        LocalDate localDate = LocalDate.of(2018, Month.NOVEMBER, 11);
+        System.out.println(localDate.until(LocalDate.now(), ChronoUnit.DAYS));
     }
 
 }
