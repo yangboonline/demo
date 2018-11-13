@@ -1,10 +1,12 @@
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class TestInstant {
 
-    public static void main(String[] args) {
+    public static void test0() {
         MultiMapTest.User user1 = MultiMapTest.User.builder().age("1").name("1").phone("1").build();
         MultiMapTest.User user2 = MultiMapTest.User.builder().age("2").name("2").phone("2").build();
         MultiMapTest.User user3 = MultiMapTest.User.builder().age("3").name("3").phone("3").build();
@@ -49,6 +51,20 @@ public class TestInstant {
     public static void test3() {
         LocalDate localDate = LocalDate.of(2018, Month.NOVEMBER, 11);
         System.out.println(localDate.until(LocalDate.now(), ChronoUnit.DAYS));
+    }
+
+    public static void test4() {
+        ZoneOffset zoneOffset = ZoneOffset.ofHours(-12);
+        LocalDate startDate = LocalDateTime.now(zoneOffset.normalized()).plusDays(-1).toLocalDate();
+        LocalDate endDate = LocalDateTime.now(zoneOffset.normalized()).plusDays(364).toLocalDate();
+
+        List<LocalDate> list = Lists.newArrayList();
+        list.add(startDate);
+        while (startDate.isBefore(endDate)) {
+            startDate = startDate.plusDays(1);
+            list.add(startDate);
+        }
+        System.out.println();
     }
 
 }
