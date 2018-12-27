@@ -15,6 +15,7 @@
         <module>eureka-client</module>
         <module>eureka-server</module>
         <module>jetcache</module>
+        <module>jpa</module>
         <module>maven-plugins</module>
         <module>mybatis</module>
         <module>oauth2</module>
