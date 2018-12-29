@@ -1,5 +1,6 @@
 package com.bert.jpa;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@Builder
 @Table(name = "t_switch_channel_stock")
 public class ChannelStockEntity implements Serializable {
 
