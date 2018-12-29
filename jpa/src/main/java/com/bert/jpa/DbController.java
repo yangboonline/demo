@@ -1,11 +1,16 @@
 package com.bert.jpa;
 
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,6 +88,32 @@ public class DbController {
             list.add(startDate);
         }
         return list;
+    }
+
+    /**
+     * 根据一段时间区间，按月份拆分成多个时间段
+     */
+    public static List<SegmentDate> getSegmentDate(String startDate, String endDate) {
+        LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        List<SegmentDate> list = Lists.newArrayList();
+        while (start.isBefore(end) || start.isEqual(end)) {
+            SegmentDate temp = SegmentDate.builder().startDate(start.toString())
+                    .endDate(start.with(TemporalAdjusters.lastDayOfMonth()).toString()).build();
+            if (start.with(TemporalAdjusters.firstDayOfMonth()).isEqual(end.with(TemporalAdjusters.firstDayOfMonth()))) {
+                temp.setEndDate(end.toString());
+            }
+            start = start.plusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+            list.add(temp);
+        }
+        return list;
+    }
+
+    @Data
+    @Builder
+    private static class SegmentDate {
+        private String startDate;
+        private String endDate;
     }
 
 }
