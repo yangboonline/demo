@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
+            <version>RELEASE</version>
             <optional>true</optional>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
