@@ -14,7 +14,12 @@ import java.util.TreeMap;
 public class SortTest {
 
     public static void main(String[] args) {
-        testMapCascadeSort();
+        int[] arr1 = {4, 5, 6, 8, 9, 2, 3, 4, 9, 5, 1, 4, 11, 22};
+        int[] arr2 = {4, 5, 6, 8, 9, 2, 3, 4, 9, 5, 1, 4, 11, 22};
+        //int[] arr = mergeArray(arr1, arr2);
+        //mergeSort(arr, 0, arr.length - 1, new int[arr.length]);
+        //quickSort(arr, 0, arr.length - 1);
+        System.out.println();
     }
 
     private static void testMapCascadeSort() {
@@ -43,12 +48,12 @@ public class SortTest {
         List<Map.Entry<Integer, Long>> list = new ArrayList<>(map.entrySet());
         list.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
         return list;
-        /*map.entrySet().stream()
-                       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10).collect(Collectors.toList())*/
     }
 
-    //从尾部开始,倒序
-    private static String reverse3(String str) {
+    /**
+     * 从尾部开始,倒序
+     */
+    private static String reverseStr2(String str) {
         char[] arr = str.toCharArray(); //string转换成char数组
         StringBuilder reverse = new StringBuilder();
         for (int i = arr.length - 1; i >= 0; i--) {
@@ -57,18 +62,18 @@ public class SortTest {
         return reverse.toString();
     }
 
-    //利用栈:First In Last Out
-    //java中不用手动销毁
-    private static String reverse4(String str) {
+    /**
+     * 利用栈:First In Last Out
+     */
+    private static String reverseStr1(String str) {
         StringBuffer sb = new StringBuffer();
         Stack<Character> s = new Stack<>();
-
-        for (int i = 0; i < str.length(); i++)
+        for (int i = 0; i < str.length(); i++) {
             s.add(str.charAt(i));
-
-        for (int i = 0; i < str.length(); i++)
+        }
+        for (int i = 0; i < str.length(); i++) {
             sb.append(s.pop());
-
+        }
         return sb.toString();
     }
 
@@ -96,41 +101,60 @@ public class SortTest {
     /**
      * 快排 quickSort(arr, 0, arr.length - 1);
      */
-    private static void quickSort(int[] arr, int left, int right) {
-        int l = left;
-        int r = right;
-        int pivod = arr[(left + right) / 2];
-        int temp;
-        while (l < r) {
-            while (arr[l] < pivod) {
-                l++;
+    private static void quickSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int base = arr[start];
+            int i = start;
+            int j = end;
+            int temp = 0;
+            do {
+                while (arr[i] < base && i < end) {
+                    i++;
+                }
+                while (arr[j] > base && j > start) {
+                    j--;
+                }
+                if (i <= j) {
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+            if (start < j) {
+                quickSort(arr, start, j);
             }
-            while (arr[r] > pivod) {
-                r--;
-            }
-            if (l >= r) {
-                break;
-            }
-            temp = arr[l];
-            arr[l] = arr[r];
-            arr[r] = temp;
-            if (arr[l] == pivod) {
-                r--;
-            }
-            if (arr[r] == pivod) {
-                l--;
+            if (end > i) {
+                quickSort(arr, i, end);
             }
         }
-        if (l == r) {
-            l++;
-            r--;
+    }
+
+    /**
+     * 合并数组
+     */
+    private static int[] mergeArray(int[] arr1, int[] arr2) {
+        int[] arr = new int[arr1.length + arr2.length];
+        int t = 0;
+        int i = 0;
+        int j = 0;
+
+        while (i < arr1.length && j < arr2.length) {
+            if (arr1[i] <= arr2[j]) {
+                arr[t++] = arr1[i++];
+            } else {
+                arr[t++] = arr1[j++];
+            }
         }
-        if (left < r) {
-            quickSort(arr, left, r);
+
+        while (i < arr1.length) {
+            arr[t++] = arr1[i++];
         }
-        if (right > l) {
-            quickSort(arr, l, right);
+        while (j < arr2.length) {
+            arr[t++] = arr1[j++];
         }
+        return arr;
     }
 
     /**
@@ -147,32 +171,23 @@ public class SortTest {
 
             while (i <= mid && j <= right) {
                 if (arr[i] <= arr[j]) {
-                    temp[t] = arr[i];
-                    i++;
-                    t++;
+                    temp[t++] = arr[i++];
                 } else {
-                    temp[t] = arr[j];
-                    j++;
-                    t++;
+                    temp[t++] = arr[j++];
                 }
             }
 
             while (i <= mid) {
-                temp[t] = arr[i];
-                i++;
-                t++;
+                temp[t++] = arr[i++];
             }
             while (j <= right) {
-                temp[t] = arr[j];
-                j++;
-                t++;
+                temp[t++] = arr[j++];
             }
 
             t = 0;
             int tempLeft = left;
             while (tempLeft <= right) {
-                arr[tempLeft] = temp[t];
-                t++;
+                arr[tempLeft] = temp[t++];
                 tempLeft++;
             }
         }
