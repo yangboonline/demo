@@ -1,21 +1,17 @@
+import com.google.common.collect.Maps;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Stack;
-import java.util.function.Function;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Data
 @Builder
 public class SortTest {
-
-    private Integer key;
-    private Long value;
 
     public static void main(String[] args) {
         testMapCascadeSort();
@@ -23,12 +19,10 @@ public class SortTest {
 
     private static void testMapCascadeSort() {
         // 一亿条数据
-        int[] arr = new int[100000000];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = new Random().nextInt(10000);
-        }
+        int[] arr = {4, 5, 6, 8, 9, 2, 3, 4, 9, 5, 1, 4, 11, 22};
+        System.out.println("开始");
         long start = System.currentTimeMillis();
-        List<Map<Integer, Long>> list = mapCascadeSort(arr);
+        List<Map.Entry<Integer, Long>> list = mapCascadeSort(arr);
         long end = System.currentTimeMillis();
         System.out.println("间隔" + (end - start));
     }
@@ -37,15 +31,17 @@ public class SortTest {
     /**
      * TopN问题
      */
-    private static List<Map<Integer, Long>> mapCascadeSort(int[] arr) {
-        return IntStream.of(arr)
-                .boxed()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet()
-                .stream()
-                .map(t -> SortTest.builder().key(t.getKey()).value(t.getValue()).build())
-                .sorted(Comparator.comparing(SortTest::getValue, Comparator.reverseOrder()).thenComparing(SortTest::getKey))
-                .map(t -> Map.of(t.getKey(), t.getValue()))
-                .collect(Collectors.toList());
+    private static List<Map.Entry<Integer, Long>> mapCascadeSort(int[] arr) {
+        TreeMap<Integer, Long> map = Maps.newTreeMap();
+        for (int item : arr) {
+            if (map.containsKey(item)) {
+                map.put(item, map.get(item) + 1L);
+            } else {
+                map.put(item, 1L);
+            }
+        }
+        return map.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10).collect(Collectors.toList());
     }
 
     //从尾部开始,倒序
