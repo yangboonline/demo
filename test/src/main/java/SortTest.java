@@ -2,12 +2,12 @@ import com.google.common.collect.Maps;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -40,8 +40,11 @@ public class SortTest {
                 map.put(item, 1L);
             }
         }
-        return map.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10).collect(Collectors.toList());
+        List<Map.Entry<Integer, Long>> list = new ArrayList<>(map.entrySet());
+        list.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
+        return list;
+        /*map.entrySet().stream()
+                       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10).collect(Collectors.toList())*/
     }
 
     //从尾部开始,倒序
