@@ -93,6 +93,47 @@ public class SortTest {
         return -1;
     }
 
+
+    /**
+     * 快排 quickSort(arr, 0, arr.length - 1);
+     */
+    private static void quickSort(int[] arr, int left, int right) {
+        int l = left;
+        int r = right;
+        int pivod = arr[(left + right) / 2];
+        int temp;
+        while (l < r) {
+            while (arr[l] < pivod) {
+                l++;
+            }
+            while (arr[r] > pivod) {
+                r--;
+            }
+            if (l >= r) {
+                break;
+            }
+            temp = arr[l];
+            arr[l] = arr[r];
+            arr[r] = temp;
+            if (arr[l] == pivod) {
+                r--;
+            }
+            if (arr[r] == pivod) {
+                l--;
+            }
+        }
+        if (l == r) {
+            l++;
+            r--;
+        }
+        if (left < r) {
+            quickSort(arr, left, r);
+        }
+        if (right > l) {
+            quickSort(arr, l, right);
+        }
+    }
+
     /**
      * 归并 mergeSort(arr, 0, arr.length - 1, new int[arr.length]);
      */
