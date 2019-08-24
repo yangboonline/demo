@@ -1,13 +1,96 @@
-import java.util.Arrays;
+import lombok.Builder;
+import lombok.Data;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Stack;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+@Data
+@Builder
 public class SortTest {
 
+    private Integer key;
+    private Long value;
+
     public static void main(String[] args) {
-        int[] arr = {21, 23, 4, 5, 2, 5, 3, 9, 0, 1, 2};
-        Arrays.stream(arr).forEach(t -> System.out.print(t + " "));
-        System.out.println();
-        bubbleSort(arr);
-        Arrays.stream(arr).forEach(t -> System.out.print(t + " "));
+        testMapCascadeSort();
+    }
+
+    private static void testMapCascadeSort() {
+        // 一亿条数据
+        int[] arr = new int[100000000];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new Random().nextInt(10000);
+        }
+        long start = System.currentTimeMillis();
+        List<Map<Integer, Long>> list = mapCascadeSort(arr);
+        long end = System.currentTimeMillis();
+        System.out.println("间隔" + (end - start));
+    }
+
+
+    /**
+     * TopN问题
+     */
+    private static List<Map<Integer, Long>> mapCascadeSort(int[] arr) {
+        return IntStream.of(arr)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet()
+                .stream()
+                .map(t -> SortTest.builder().key(t.getKey()).value(t.getValue()).build())
+                .sorted(Comparator.comparing(SortTest::getValue, Comparator.reverseOrder()).thenComparing(SortTest::getKey))
+                .map(t -> Map.of(t.getKey(), t.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    //从尾部开始,倒序
+    private static String reverse3(String str) {
+        char[] arr = str.toCharArray(); //string转换成char数组
+        StringBuilder reverse = new StringBuilder();
+        for (int i = arr.length - 1; i >= 0; i--) {
+            reverse.append(arr[i]);
+        }
+        return reverse.toString();
+    }
+
+    //利用栈:First In Last Out
+    //java中不用手动销毁
+    private static String reverse4(String str) {
+        StringBuffer sb = new StringBuffer();
+        Stack<Character> s = new Stack<>();
+
+        for (int i = 0; i < str.length(); i++)
+            s.add(str.charAt(i));
+
+        for (int i = 0; i < str.length(); i++)
+            sb.append(s.pop());
+
+        return sb.toString();
+    }
+
+
+    /**
+     * 二分查找先排序 binarySearch(new int[]{0, 1, 2, 3, 4, 5}, 5)
+     */
+    private static int binarySearch(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (arr[mid] == target) {
+                return mid;
+            } else if (arr[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return -1;
     }
 
     /**
