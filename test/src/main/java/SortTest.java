@@ -69,7 +69,7 @@ public class SortTest {
         StringBuffer sb = new StringBuffer();
         Stack<Character> s = new Stack<>();
         for (int i = 0; i < str.length(); i++) {
-            s.add(str.charAt(i));
+            s.push(str.charAt(i));
         }
         for (int i = 0; i < str.length(); i++) {
             sb.append(s.pop());
