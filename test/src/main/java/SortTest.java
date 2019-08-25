@@ -187,8 +187,7 @@ public class SortTest {
             t = 0;
             int tempLeft = left;
             while (tempLeft <= right) {
-                arr[tempLeft] = temp[t++];
-                tempLeft++;
+                arr[tempLeft++] = temp[t++];
             }
         }
     }
