@@ -97,14 +97,12 @@ public class TreeNode {
             List<Integer> level = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 TreeNode node = queue.poll();
-                if (node != null) {
-                    level.add(node.val);
-                    if (node.left != null) {
-                        queue.offer(node.left);
-                    }
-                    if (node.right != null) {
-                        queue.offer(node.right);
-                    }
+                level.add(node.val);
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
                 }
             }
             result.add(level);
