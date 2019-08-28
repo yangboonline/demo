@@ -85,7 +85,7 @@ public class TreeNode {
         list.add(root.val);
     }
 
-    public static List<List<Integer>> levelOrder(TreeNode root) {
+    private static List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if (root == null) {
             return result;
@@ -97,12 +97,14 @@ public class TreeNode {
             List<Integer> level = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 TreeNode node = queue.poll();
-                level.add(node.val);
-                if (node.left != null) {
-                    queue.offer(node.left);
-                }
-                if (node.right != null) {
-                    queue.offer(node.right);
+                if (node != null) {
+                    level.add(node.val);
+                    if (node.left != null) {
+                        queue.offer(node.left);
+                    }
+                    if (node.right != null) {
+                        queue.offer(node.right);
+                    }
                 }
             }
             result.add(level);
