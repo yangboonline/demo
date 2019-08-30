@@ -20,6 +20,41 @@ public class TreeNode {
     private TreeNode left;
     private TreeNode right;
 
+    private TreeNode(int val) {
+        this.val = val;
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums.length == 0) {
+            return null;
+        }
+        return sortedArrayToBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBST(int[] nums, int i, int j) {
+        if (i > j) {
+            return null;
+        }
+        int m = i + (j - i) / 2;
+        TreeNode root = new TreeNode(nums[m]);
+        root.left = sortedArrayToBST(nums, i, m - 1);
+        root.right = sortedArrayToBST(nums, m + 1, j);
+        return root;
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isMirror(root.left, root.right);
+    }
+
+    public boolean isMirror(TreeNode left, TreeNode right) {
+        if (left == null) return right == null;
+        if (right == null) return left == null;
+        return left.val == right.val && isMirror(left.left, right.right) && isMirror(left.right, right.left);
+    }
+
     private static int maxDepth(TreeNode node) {
         if (node == null) {
             return 0;
