@@ -82,7 +82,7 @@
                         <artifactId>mysql-connector-java</artifactId>
                         <version>5.1.46</version>
                     </dependency>
-                    <!-- 生成时打开依赖 -->
+                    <!-- lombok-mybatis插件(可选)-->
                     <!--<dependency>
                         <groupId>mbg.plugin</groupId>
                         <artifactId>mbg.lombok</artifactId>
