@@ -21,6 +21,7 @@
         <module>oauth2</module>
         <module>swagger</module>
         <module>test</module>
+        <module>scala-test</module>
     </modules>
     
 </project>
