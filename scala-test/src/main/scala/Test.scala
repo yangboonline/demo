@@ -1,4 +1,6 @@
-import com.alibaba.fastjson.JSON
+import java.util.{HashMap => JavaHashMap}
+
+import scala.collection.mutable.{HashMap => ScalaHashMap}
 
 /**
  * @author Yang Bo(boyang217740@sohu-inc.com)
@@ -8,9 +10,19 @@ import com.alibaba.fastjson.JSON
 object Test {
 
   def main(args: Array[String]): Unit = {
-    val str = "{\"id\":169836835}"
-    val jsonObject = JSON.parseObject(str)
-    println(jsonObject.get("id"))
+    val scalaHashMap = new ScalaHashMap[String, Int]
+    val javaHashMap = new JavaHashMap[String, Int]
+    javaHashMap.put("a", 1)
+    javaHashMap.put("b", 2)
+    javaHashMap.put("c", 3)
+    val iterator = javaHashMap.entrySet.iterator
+    while (iterator.hasNext) {
+      val entry = iterator.next
+      scalaHashMap.put(entry.getKey, entry.getValue)
+    }
+    for (tuple <- scalaHashMap) {
+      println(tuple._1 + "=>" + tuple._2)
+    }
   }
 
   def multiTable(n: Int) = {
