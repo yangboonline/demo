@@ -76,21 +76,24 @@ public class CommonDao {
 
     /**
      * 相似搜索
-     * @param similarSearchParam xiang'si
-     * @return
      */
     public List<Map<String, Object>> similarSearch(SimilarSearchParam similarSearchParam) {
         QueryBuilder queryBuilder = null;
+        // 构建match查询
         if (SearchType.MATCH.equals(similarSearchParam.getSearchType())) {
             queryBuilder = matchQuery(similarSearchParam.getKey(), similarSearchParam.getValue());
-        } else if (SearchType.LIKE.equals(similarSearchParam.getSearchType())) {
+        }
+        // 构建prefix查询
+        else if (SearchType.LIKE.equals(similarSearchParam.getSearchType())) {
             queryBuilder = prefixQuery(similarSearchParam.getKey(), similarSearchParam.getValue());
         }
         if (Objects.isNull(queryBuilder)) {
             return Lists.newArrayList();
         }
-        BoolQueryBuilder boolQueryBuilder = boolQuery().must(queryBuilder);
 
+        // 构建bool查询
+        BoolQueryBuilder boolQueryBuilder = boolQuery().must(queryBuilder);
+        // 构架filter查询(自动缓存term查询结果)
         if (MapUtils.isNotEmpty(similarSearchParam.getFilterParam())) {
             Set<Map.Entry<String, Object>> set = similarSearchParam.getFilterParam().entrySet();
             for (Map.Entry<String, Object> entry : set) {
@@ -98,25 +101,28 @@ public class CommonDao {
             }
         }
 
+        // 构建查询的source字段
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(boolQueryBuilder);
-
+        // source中包含的字段
         List<String> returnParamList = similarSearchParam.getReturnKeys();
+        searchSourceBuilder.size(Math.min(similarSearchParam.getSize(), Constant.MAX_SEARCH_SIZE));
 
-        searchSourceBuilder
-                .size(Math.min(similarSearchParam.getSize(), Constant.MAX_SEARCH_SIZE));
-        if (returnParamList.size() == 1 && Constant.ALL_FIELDS.equals(returnParamList.get(0))) {
-            // 字段不做过滤，全部返回
-        } else {
+        // 是否过滤字段
+        boolean fieldFilter = returnParamList.size() == 1 && Constant.ALL_FIELDS.equals(returnParamList.get(0));
+        if (!fieldFilter) {
             searchSourceBuilder.fetchSource(returnParamList.toArray(new String[]{}), new String[]{});
         }
 
         if (log.isDebugEnabled()) {
             log.debug(searchSourceBuilder.toString());
         }
+
+        // 执行复合查询
         SearchRequest searchRequest = new SearchRequest(similarSearchParam.getIndex()).source(searchSourceBuilder);
         SearchResponse searchResponse = EsUtil.search(restHighLevelClient, searchRequest);
         SearchHits hits = searchResponse.getHits();
 
+        // 封装命中结果
         List<Map<String, Object>> list = newArrayList();
         for (SearchHit hit : hits.getHits()) {
             list.add(hit.getSourceAsMap());
@@ -183,7 +189,7 @@ public class CommonDao {
             Response response = restClient.performRequest(request);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == Constant.HTTP_SUCCESS_CODE) {
-                MultiGetEntity multiGetEntity = com.alibaba.fastjson.JSON
+                MultiGetEntity multiGetEntity = JSON
                         .parseObject(EntityUtils.toString(response.getEntity()), MultiGetEntity.class);
                 for (MultiGetEntity.DocInfo docInfo : multiGetEntity.getDocs()) {
                     if (docInfo.getError() == null && docInfo.isFound()
@@ -196,15 +202,12 @@ public class CommonDao {
         } catch (IOException e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
-
         return list;
     }
 
     public void save(CommonParam commonParam, boolean async) {
-
         IndexRequest indexRequest = EsUtil.buildIndexRequest(commonParam.getIndex(), commonParam.getId(),
                 commonParam.getData());
-
         if (async) {
             restHighLevelClient.indexAsync(indexRequest, RequestOptions.DEFAULT, new ActionListener<IndexResponse>() {
                 @Override
@@ -235,11 +238,9 @@ public class CommonDao {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     public void batchSave(List<CommonParam> commonParams, boolean async) {
-
         BulkRequest request = new BulkRequest();
         for (CommonParam commonParam : commonParams) {
             IndexRequest indexRequest = EsUtil.buildIndexRequest(commonParam.getIndex(), commonParam.getId(),
@@ -255,7 +256,6 @@ public class CommonDao {
 
     public void delete(CommonParam commonParam, boolean async) {
         DeleteRequest deleteRequest = new DeleteRequest(commonParam.getIndex(), Constant.TYPE, commonParam.getId());
-
         if (async) {
             restHighLevelClient.deleteAsync(deleteRequest, RequestOptions.DEFAULT, new ActionListener<DeleteResponse>() {
                 @Override
@@ -310,7 +310,6 @@ public class CommonDao {
 
         if (async) {
             restHighLevelClient.updateAsync(updateRequest, RequestOptions.DEFAULT, new ActionListener<UpdateResponse>() {
-
                 @Override
                 public void onResponse(UpdateResponse updateResponse) {
                     List<String> msgs = EsUtil.getResponseWarnings(updateResponse);

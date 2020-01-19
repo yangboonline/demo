@@ -2,7 +2,6 @@ package com.yangbo.es.model.common;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
-import com.yangbo.es.constant.enums.OrderByEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,8 +35,6 @@ public class Pagination implements Serializable {
     protected int pageTotal = 0;
     protected String currentPage = null;
     protected Map<String, Object> paramMap = Maps.newHashMap();
-    protected OrderByEnum order = OrderByEnum.ASC;
-    protected String orderBy = null;
     private int showPageCount = 9;
     protected String pager = null;
 
@@ -148,8 +145,6 @@ public class Pagination implements Serializable {
         pagination.setUri(pgn.getUri());
         pagination.setPn(pgn.getPn());
         pagination.setPs(pgn.getPs());
-        pagination.setOrder(pgn.getOrder());
-        pagination.setOrderBy(pgn.getOrderBy());
         pagination.setTotal(0);
         return pagination;
     }

@@ -38,7 +38,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +55,6 @@ public class EsUtil {
         }
         return list;
     }
-
 
     public static SearchResponse search(RestHighLevelClient restHighLevelClient, SearchRequest searchRequest) {
         Assert.notNull(restHighLevelClient, "RestHighLevelClient对象不能为null.");
@@ -76,7 +74,7 @@ public class EsUtil {
         Assert.notNull(scrollRequest, "SearchScrollRequest对象不能为null.");
         SearchResponse searchResponse;
         try {
-            searchResponse = restHighLevelClient.searchScroll(scrollRequest, RequestOptions.DEFAULT);
+            searchResponse = restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new BusinessException(ErrorCodeEnum.FAILED_ERROR.getCode(), e.getMessage());
@@ -122,20 +120,23 @@ public class EsUtil {
     }
 
     public static XContentBuilder buildDefaultTextType(XContentBuilder builder, String name) throws IOException {
-        return builder.startObject(name).field("type", "text").startObject("fields").startObject("keyword")
-                .field("type", "keyword").field("ignore_above", 256).endObject().endObject().endObject();
+        return builder.startObject(name).field("type", "text")
+                .startObject("fields").startObject("keyword")
+                .field("type", "keyword").field("ignore_above", 256)
+                .endObject().endObject().endObject();
     }
 
     public static XContentBuilder buildSmartCNType(XContentBuilder builder, String name) throws IOException {
-        return builder.startObject(name).field("type", "text").field("analyzer", "smartcn").startObject("fields")
-                .startObject("keyword").field("type", "keyword").field("ignore_above", 256).endObject().endObject()
-                .endObject();
+        return builder.startObject(name).field("type", "text").field("analyzer", "smartcn")
+                .startObject("fields").startObject("keyword").field("type", "keyword").
+                        field("ignore_above", 256).endObject().endObject().endObject();
     }
 
     public static XContentBuilder buildNgramType(XContentBuilder builder, String name) throws IOException {
-        return builder.startObject(name).field("type", "text").field("analyzer", "ngram_analyzer").startObject("fields")
-                .startObject("keyword").field("type", "keyword").field("ignore_above", 256).endObject().endObject()
-                .endObject();
+        return builder.startObject(name).field("type", "text")
+                .field("analyzer", "ngram_analyzer").startObject("fields")
+                .startObject("keyword").field("type", "keyword")
+                .field("ignore_above", 256).endObject().endObject().endObject();
     }
 
     /**
@@ -144,13 +145,6 @@ public class EsUtil {
     public static boolean indexNotExists(RestClient restClient, String index) throws IOException {
         Response response = restClient.performRequest(new Request(HttpMethod.HEAD.toString(), index));
         return response.getStatusLine().getStatusCode() != 200;
-    }
-
-    public static long getTime(Date date) {
-        if (date == null) {
-            return System.currentTimeMillis();
-        }
-        return date.getTime();
     }
 
     public static String object2jsonStr(Object data) {
@@ -164,19 +158,18 @@ public class EsUtil {
     }
 
     public static IndexRequest buildIndexRequest(String index, String id, Object data) {
-        IndexRequest indexRequest = null;
+        IndexRequest indexRequest;
         if (StringUtils.isEmpty(id)) {
             indexRequest = new IndexRequest(index, Constant.TYPE);
         } else {
             indexRequest = new IndexRequest(index, Constant.TYPE, id);
         }
-        String jsonData = object2jsonStr(data);
-        indexRequest.source(jsonData, XContentType.JSON);
+        indexRequest.source(object2jsonStr(data), XContentType.JSON);
         return indexRequest;
     }
 
     /**
-     * 通用批量写入操作
+     * 通用批量写入操作(异步)
      *
      * @param data 批量保存数据，失败时记录日志使用,请覆盖对象toString方法
      */
@@ -228,16 +221,15 @@ public class EsUtil {
         }
 
         if (upsert) {
-            IndexRequest indexRequest = buildIndexRequest(param.getIndex(), param.getId(), object2jsonStr(param.getData()));
+            IndexRequest indexRequest = buildIndexRequest(param.getIndex(), param.getId(),
+                    object2jsonStr(param.getData()));
             updateRequest.upsert(indexRequest);
         }
-
         return updateRequest;
     }
 
     public static UpdateRequest buildUpdateRequest(String index, String id, Object data) {
-        String jsonData = object2jsonStr(data);
-        return new UpdateRequest(index, Constant.TYPE, id).doc(jsonData, XContentType.JSON);
+        return new UpdateRequest(index, Constant.TYPE, id).doc(object2jsonStr(data), XContentType.JSON);
     }
 
     public static <T> ServiceResult<T> queryData2RpcResult(QueryData<T> queryData, Pagination pgn) {
