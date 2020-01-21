@@ -23,4 +23,4 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-!/scala-test.iml
+/scala-test.iml
