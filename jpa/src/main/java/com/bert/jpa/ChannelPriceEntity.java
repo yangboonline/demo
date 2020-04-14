@@ -1,6 +1,12 @@
 package com.bert.jpa;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.repository.Temporal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,11 +14,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Entity
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_switch_channel_price")
 public class ChannelPriceEntity implements Serializable {
 
@@ -67,6 +78,7 @@ public class ChannelPriceEntity implements Serializable {
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "update_time")
+    @UpdateTimestamp
     private Date updateTime;
 
 }

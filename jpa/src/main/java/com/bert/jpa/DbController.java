@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +32,21 @@ public class DbController {
 
     @Resource
     private ChannelStockDao channelStockDao;
+    @Resource
+    private ChannelPriceDao channelPriceDao;
+
+    @Resource
+    private JpaRepository<ChannelPriceEntity, Long> channelPriceModelDao;
+
+    @GetMapping("/db1")
+    public String db1() throws Exception {
+        ChannelPriceEntity lvyue = ChannelPriceEntity.builder().accessPlatform(12)
+                .channelCode("hhh")
+                .createTime(new Date()).deleted(2).build();
+        TimeUnit.SECONDS.sleep(1L);
+        channelPriceDao.save(lvyue);
+        return "";
+    }
 
     @GetMapping("/db")
     public String db() {
