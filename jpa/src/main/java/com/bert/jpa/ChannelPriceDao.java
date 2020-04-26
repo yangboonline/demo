@@ -19,7 +19,7 @@ public interface ChannelPriceDao extends JpaRepository<ChannelPriceEntity, Long>
      */
     @Query(nativeQuery = true,
             value = "SELECT * FROM t_switch_channel_stock WHERE 1 = 1 "
-                    + "AND (:ids IS NULL OR id IN (:ids)) "
+                    + "AND IFNULL(id IN (:ids), 1 = 1) "
                     + "AND (:deleted IS NULL OR deleted = :deleted) ")
     List<ChannelPriceEntity> findAllByIdInAndDeletedNative(@Param("ids") List<Long> ids,
                                                            @Param("deleted") Integer deleted);
@@ -29,7 +29,7 @@ public interface ChannelPriceDao extends JpaRepository<ChannelPriceEntity, Long>
      */
     @Query(nativeQuery = true,
             value = "SELECT id, pms_sys_code AS pmsSysCode,access_platform FROM t_switch_channel_stock WHERE 1 = 1 "
-                    + "AND (:ids IS NULL OR id IN (:ids)) "
+                    + "AND IFNULL(id IN (:ids), 1 = 1) "
                     + "AND (:deleted IS NULL OR deleted = :deleted) ")
     List<ChannelPriceEntityProjection> findAllByIdInAndDeletedProjection(@Param("ids") List<Long> ids,
                                                                          @Param("deleted") Integer deleted);
