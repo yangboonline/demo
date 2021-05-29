@@ -6,3 +6,7 @@ spring:
     password: root
   jpa:
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    # jpa自动建表
+    hibernate:
+      ddl-auto: update

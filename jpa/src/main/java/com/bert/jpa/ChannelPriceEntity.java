@@ -1,6 +1,11 @@
 package com.bert.jpa;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +18,10 @@ import java.util.Date;
 
 @Data
 @Entity
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_switch_channel_price")
 public class ChannelPriceEntity implements Serializable {
 
@@ -67,6 +76,7 @@ public class ChannelPriceEntity implements Serializable {
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "update_time")
+    @UpdateTimestamp
     private Date updateTime;
 
 }
